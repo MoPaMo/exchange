@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   if (req.session.logged_in)
     next()
   else {
-    let pages_ok = [/\//, /item\/\w/, /\login/]
+    let pages_ok = [/\//, /item\/\w/, /\login/, /\register/]
     let check = (n) => {//check can be entered without login
       let a=false;
       for (i in pages_ok) {
