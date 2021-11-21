@@ -4,6 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
+  <link rel="stylesheet" href="bootstrap.min.css">
   <title></title>
 </head>
 
@@ -33,18 +34,25 @@
       </div>
     </div>
   </nav>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-md card" style="width: 100%">
+      <div class="col-md card  m-2" style="width: 100%">
         <img src="placeholder.jpg" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">{{item.name}}</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <p class="card-text">Online seit {{date}} + {{}} Interessen bis jetzt</p>
           <button class="btn btn-primary">Interesse</button>
         </div>
       </div>
-      <div class="col-md">
-        <item-desc text:"Hi" />
+      <div class="col-md m-2 rounded-top border">
+        <div class="bg-light rounded-top p-2 w-100">
+          <h6>von {{name}}</h6>
+          <small>Auf Exchange seit {{date_on}} + {{item_count}} Kleider online</small>
+        </div>
+        <article class="p-2">
+          <h5>Über dieses Stück </h5>
+          {{beschreibung}}
+        </article>
       </div>
     </div>
   </div>
