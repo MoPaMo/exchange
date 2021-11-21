@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <router-link to="/foo"></router-link>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <section class="bg-primary p-5 m-2 rounded mb-5 row text-light">
+    <div class="col-sm ">
+      <h2 class="display-4 fw-bold">Exchange</h2>
+      <h4 class="fw-bolder">Finde und tausche interessante Stücke und rette die Umwelt! </h4>
+      <br><br><br><br>
+      <form class="input-group mb-3">
+        <input required type="search" class="form-control" placeholder="Gib etwas ein" aria-label="Suchfeld" aria-describedby="button-addon2">
+        <input class="btn btn-dark" type="submit" value="Suchen" id="button-addon2" />
+      </form>
+      <br>
+      <small>oder...</small><br>
+      <br>
+      <!-- cta -->
+      <div class="btn-group btn-group-lg bt" role="group" aria-label="Anmelden oder registrieren">
+        <button type="button" class="btn btn-outline-light">Anmelden</button>
+        <button type="button" class="btn btn-outline-dark">Registrieren</button>
+      </div>
+
+    </div>
+    <div class="col-sm  d-sm-none d-none d-md-block">
+      <img src="header.png" alt="" class="w-100">
+    </div>
+  </section>
+  <div class="bg-dark text-light p-5 mb-4 rounded">
+    <h2 class="display-6 fw-bold">Neueste Stücke</h2>
+    <div id="carouselExampleIndicators" class="carousel slide pt-3 rounded" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="ml-5 mr-5 carousel-item active">
+          <div class="d-block container-fluid rounded v-100" style="background-image:url(placeholder.jpg); height:65vh;">
+            <div class="carousel-caption ">
+              <h5>{{item.name}} <span class="badge bg-secondary">L</span></h5>
+              <a href="/item/{{item.id}}" class="btn btn-primary m-2  stretched-link">Ansehen</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Letztes</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Nächstes</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-light p-5 mb-4 rounded">
+    <h2 class="display-6 fw-bold">Finde dein Traumstück</h2>
+    <form class="input-group mb-3">
+      <input required type="search" class="form-control" placeholder="Gib etwas ein" aria-label="Suchfeld" aria-describedby="button-addon2">
+      <input class="btn btn-outline-secondary" type="submit" value="Suchen" id="button-addon2" />
+    </form>
+  </div>
+  
+  <script src="bootstrap.bundle.min.js" charset="utf-8"></script>
+</body>
+
+</html>
