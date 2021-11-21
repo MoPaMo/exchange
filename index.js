@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config();
 const path = require('path');
 var app =express();
 app.use(session({
