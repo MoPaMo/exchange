@@ -18,6 +18,26 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use((req, res, next) => {
+  if (req.session.logged_in)
+    next()
+  else {
+    let pages_ok = [/\//, /item\/\w/, /\login/]
+    let check = (n) => {//check can be entered without login
+      let a=false;
+      for (i in pages_ok) {
+        let j = pages_ok[i];
+         if(!!n.match(j)) a=true;
+      }
+      return a;
+    }
+    if (check(req.url)) {
+      next();
+    } else {
+      res.redirect("/login?continue="+encodeURIComponent(req.url))
+    }
+  }
+})
 const renderFile = function(path, data, cb) {
   fs.readFile(path, (err, buff) => {
     // if any error
