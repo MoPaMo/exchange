@@ -58,6 +58,8 @@ app.get("/", (req, res) => {
 });
 app.get("/item/:id", (req, res) => {
   res.sendFile(`${__dirname}/views/item.html`);
-
+});
+app.get("/signin", (req, res) => {
+  res.sendFile(`${__dirname}/views/signin.html`);
 });
 app.listen(3000);
