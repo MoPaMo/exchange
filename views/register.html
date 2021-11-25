@@ -18,9 +18,10 @@
 
 <body class="text-center">
   <main>
-    <form action="/signin" method="post">
+    <form action="/register" method="post">
       <img class="mb-4" src="/image-missing.png" alt="" width="72" height="57">
-      <h1 class="h3 mb-3 fw-normal">Bitte melde dich an</h1>
+      <h1 class="h3 mb-3 fw-normal">Neuen Account erstellen</h1>
+
       <div class="form-floating">
         <input type="email" class="form-control" id="floatingInput" placeholder="name@ksth.schulerzbistum.de">
         <label for="floatingInput">Email-Addresse</label>
@@ -29,11 +30,10 @@
         <input type="password" class="form-control" id="floatingPassword" placeholder="Passwort">
         <label for="floatingPassword">Passwort</label>
       </div>
-
       <div class="checkbox mb-3">
-        <a href="/register" class="text-muted">Stattdessen registrieren</a>
+        <a href="/login" class="text-muted">Stattdessen anmelden</a>
       </div>
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Registrieren</button>
       <p class="mt-5 mb-3 text-muted">©2021</p>
     </form>
   </main>

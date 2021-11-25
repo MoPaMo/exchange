@@ -62,4 +62,7 @@ app.get("/item/:id", (req, res) => {
 app.get("/signin", (req, res) => {
   res.sendFile(`${__dirname}/views/signin.html`);
 });
+app.get("/register", (req, res) => {
+  res.sendFile(`${__dirname}/views/register.html`);
+});
 app.listen(3000);
