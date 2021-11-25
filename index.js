@@ -2,10 +2,15 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const mustache = require("mustache");
+const nodemailer = require('nodemailer');
 const dotenv = require('dotenv').config();
 const path = require('path');
 const fs = require("fs");
-
+const {
+  customAlphabet
+} = require('nanoid');
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const nanoid = customAlphabet(alphabet, 6);
 var app = express();
 app.use(session({
   secret: process.env.session_pwd,
@@ -18,23 +23,31 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')))
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.email,
+    pass: process.env.emailPwd
+  }
+});
+
 app.use((req, res, next) => {
   if (req.session.logged_in)
     next()
   else {
     let pages_ok = [/\//, /item\/\w/, /\login/, /\register/]
-    let check = (n) => {//check can be entered without login
-      let a=false;
+    let check = (n) => { //check can be entered without login
+      let a = false;
       for (i in pages_ok) {
         let j = pages_ok[i];
-         if(!!n.match(j)) a=true;
+        if (!!n.match(j)) a = true;
       }
       return a;
     }
     if (check(req.url)) {
       next();
     } else {
-      res.redirect("/login?continue="+encodeURIComponent(req.url))
+      res.redirect("/login?continue=" + encodeURIComponent(req.url))
     }
   }
 })
@@ -60,9 +73,74 @@ app.get("/item/:id", (req, res) => {
   res.sendFile(`${__dirname}/views/item.html`);
 });
 app.get("/signin", (req, res) => {
-  res.sendFile(`${__dirname}/views/signin.html`);
+  if (!req.session.logged_in) { //not logged in
+    res.sendFile(`${__dirname}/views/signin.html`);
+  } else { //already logged in, redirect to
+    res.redirect((req.query.continue ? req.query.continue : "/"))
+  }
 });
 app.get("/register", (req, res) => {
   res.sendFile(`${__dirname}/views/register.html`);
 });
+app.post("/register", (req, res) => {
+  if (!req.session.logged_in) { //not logged in
+    if (!!req.body.pwd && !!req.body.email) {
+      if (req.body.email.match(/^[a-zA-Z0-9_.+]+@ksth\.schulerzbistum\.de+$/)) {
+        req.session.logging_in = true;
+        req.session.pwd = req.body.pwd;
+        req.session.email = req.body.email;
+        res.redirect("/code");
+      } else { // no valid email
+        res.redirect(req.originalUrl);
+      }
+    }
+  } else { //already logged in, redirect to
+    res.redirect((req.query.continue ? req.query.continue : "/"))
+  }
+})
+app.get("/code", (req, res) => {
+  if (!req.session.logged_in) {
+    if (req.session.logging_in) {
+      let secret = nanoid();
+      req.session.secret = secret;
+
+
+      let mailOptions = {
+        from: process.env.email,
+        to: req.session.email,
+        subject: 'Aktiviere deinen Account',
+        text: 'Dein Bestätigungscode lautet ' + secret
+      };
+      console.log(mailOptions);
+      transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+      res.sendFile(`${__dirname}/views/code.html`);
+    } else {
+      res.redirect("/register")
+    }
+  } else {
+    res.redirect("/")
+  }
+})
+app.post("/code", (req, res) => {
+  if (!req.session.logged_in) {
+    if (req.session.logging_in) {
+      if (req.session.secret == req.body.code) {
+        res.send("success")
+      } else {
+        res.redirect("/code")
+      }
+    } else {
+      console.log(re.session.logging_in);
+      res.redirect("/login")
+    }
+  } else {
+    res.redirect("/")
+  }
+})
 app.listen(3000);
