@@ -111,7 +111,6 @@ app.get("/code", (req, res) => {
         subject: 'Aktiviere deinen Account',
         text: 'Dein Bestätigungscode lautet ' + secret
       };
-      console.log(mailOptions);
       transporter.sendMail(mailOptions, function(error, info) {
         if (error) {
           console.log(error);
@@ -136,7 +135,6 @@ app.post("/code", (req, res) => {
         res.redirect("/code")
       }
     } else {
-      console.log(re.session.logging_in);
       res.redirect("/login")
     }
   } else {
