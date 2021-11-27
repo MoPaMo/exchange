@@ -84,11 +84,12 @@ app.get("/register", (req, res) => {
 });
 app.post("/register", (req, res) => {
   if (!req.session.logged_in) { //not logged in
-    if (!!req.body.pwd && !!req.body.email) {
+    if (!!req.body.pwd && !!req.body.email&&!!req.body.name) {
       if (req.body.email.match(/^[a-zA-Z0-9_.+]+@ksth\.schulerzbistum\.de+$/)) {
         req.session.logging_in = true;
         req.session.pwd = req.body.pwd;
         req.session.email = req.body.email;
+        req.session.name=req.body.name;
         res.redirect("/code");
       } else { // no valid email
         res.redirect(req.originalUrl);
@@ -130,7 +131,7 @@ app.post("/code", (req, res) => {
   if (!req.session.logged_in) {
     if (req.session.logging_in) {
       if (req.session.secret == req.body.code) {
-        res.send("success")
+        res.send("success:")
       } else {
         res.redirect("/code")
       }
