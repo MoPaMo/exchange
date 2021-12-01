@@ -126,10 +126,10 @@ app.post("/code", (req, res) => {
           `SELECT id FROM user WHERE username=? OR email=? LIMIT 1;`,
           [req.session.name, req.session.email],
           (err, rows) => {
-            if(rows){
+            if (rows) {
               redirect("/register");
-            }else{
-              db.run("INSERT INTO user (username, email, pwd_hash, joined) VALUES (?,?,?,?);", [req.session.username,email, pwd_hash,Math.floor(Date.now() / 1000)])
+            } else {
+              db.run("INSERT INTO user (username, email, pwd_hash, joined) VALUES (?,?,?,?);", [req.session.username, email, pwd_hash, Math.floor(Date.now() / 1000)])
               //CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL, pwd_hash TEXT NOT NULL, joined INTEGER);
             }
           })
