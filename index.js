@@ -75,12 +75,12 @@ app.get("/register", (req, res) => {
 });
 app.post("/register", (req, res) => {
   if (!req.session.logged_in) { //not logged in
-    if (!!req.body.pwd && !!req.body.email&&!!req.body.name) {
+    if (!!req.body.pwd && !!req.body.email && !!req.body.name) {
       if (req.body.email.match(/^[a-zA-Z0-9_.+]+@ksth\.schulerzbistum\.de+$/)) {
         req.session.logging_in = true;
         req.session.pwd = req.body.pwd;
         req.session.email = req.body.email;
-        req.session.name=req.body.name;
+        req.session.name = req.body.name;
         res.redirect("/code");
       } else { // no valid email
         res.redirect(req.originalUrl);
@@ -122,7 +122,17 @@ app.post("/code", (req, res) => {
   if (!req.session.logged_in) {
     if (req.session.logging_in) {
       if (req.session.secret == req.body.code) {
-        res.send("success:")
+        db.all(
+          `SELECT id FROM user WHERE username=? OR email=? LIMIT 1;`,
+          [req.session.name, req.session.email],
+          (err, rows) => {
+            if(rows){
+              redirect("/register");
+            }else{
+              db.run("INSERT INTO user (username, email, pwd_hash, joined) VALUES (?,?,?,?);", [req.session.username,email, pwd_hash,Math.floor(Date.now() / 1000)])
+              //CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL, pwd_hash TEXT NOT NULL, joined INTEGER);
+            }
+          })
       } else {
         res.redirect("/code")
       }
@@ -136,7 +146,7 @@ app.post("/code", (req, res) => {
 app.listen(3000);
 process.on('SIGINT', () => {
   console.log("Closing DB, server")
-    db.close();
-    app.close();
-    console.log("Finished!")
+  db.close();
+  app.close();
+  console.log("Finished!")
 });
