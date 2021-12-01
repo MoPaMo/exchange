@@ -3,6 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const mustache = require("mustache");
 const nodemailer = require('nodemailer');
+const sqlite3 = require("sqlite3").verbose();
 const dotenv = require('dotenv').config();
 const path = require('path');
 const fs = require("fs");
@@ -31,26 +32,16 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-app.use((req, res, next) => {
-  if (req.session.logged_in)
-    next()
-  else {
-    let pages_ok = [/\//, /item\/\w/, /\login/, /\register/]
-    let check = (n) => { //check can be entered without login
-      let a = false;
-      for (i in pages_ok) {
-        let j = pages_ok[i];
-        if (!!n.match(j)) a = true;
-      }
-      return a;
-    }
-    if (check(req.url)) {
-      next();
-    } else {
-      res.redirect("/login?continue=" + encodeURIComponent(req.url))
-    }
+// open the database
+var dberror = false;
+let db = new sqlite3.Database("./db/db.db", sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+    console.error(err.message);
+    dberror = err.message;
   }
-})
+  console.log("Connected to the database.");
+});
+
 const renderFile = function(path, data, cb) {
   fs.readFile(path, (err, buff) => {
     // if any error
@@ -143,3 +134,9 @@ app.post("/code", (req, res) => {
   }
 })
 app.listen(3000);
+process.on('SIGINT', () => {
+  console.log("Closing DB, server")
+    db.close();
+    app.close();
+    console.log("Finished!")
+});
